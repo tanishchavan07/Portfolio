@@ -364,8 +364,11 @@ function WebGLField() {
     const rotX = a => new Float32Array([1,0,0,0, 0,Math.cos(a),-Math.sin(a),0, 0,Math.sin(a),Math.cos(a),0, 0,0,0,1]);
     const trans = (x,y,z) => new Float32Array([1,0,0,0, 0,1,0,0, 0,0,1,0, x,y,z,1]);
 
-    window.addEventListener("mousemove", e => { mouse=[e.clientX/w,e.clientY/h]; });
-    window.addEventListener("resize", () => { w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; gl.viewport(0,0,w,h); });
+    const handleMouse = e => { mouse=[e.clientX/w,e.clientY/h]; };
+    const handleResize = () => { w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; gl.viewport(0,0,w,h); };
+
+    window.addEventListener("mousemove", handleMouse);
+    window.addEventListener("resize", handleResize);
     gl.viewport(0,0,w,h); gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
     let raf;
@@ -384,7 +387,11 @@ function WebGLField() {
       raf = requestAnimationFrame(draw);
     };
     draw();
-    return () => cancelAnimationFrame(raf);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("mousemove", handleMouse);
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   return (
@@ -406,15 +413,18 @@ function Typing({ words }) {
     const w = words[idx];
     const t = setTimeout(() => {
       if (!del) {
-        setText(w.slice(0, text.length+1));
-        if (text.length+1 === w.length) setTimeout(()=>setDel(true),1400);
+        setText(w.slice(0, text.length + 1));
+        if (text.length + 1 === w.length) setTimeout(() => setDel(true), 1400);
       } else {
-        setText(w.slice(0, text.length-1));
-        if (text.length-1===0) { setDel(false); setIdx((idx+1)%words.length); }
+        setText(w.slice(0, text.length - 1));
+        if (text.length - 1 === 0) {
+          setDel(false);
+          setIdx((idx + 1) % words.length);
+        }
       }
     }, del ? 50 : 85);
-    return ()=>clearTimeout(t);
-  },[text,del,idx]);
+    return () => clearTimeout(t);
+  }, [words, text, del, idx]);
   return <><span className="typing">{text}</span><span className="cursor"/></>;
 }
 
@@ -484,7 +494,7 @@ function useReveal() {
     },{threshold:.1});
     els.forEach(el=>obs.observe(el));
     return ()=>obs.disconnect();
-  });
+  }, []);
 }
 
 /* ══════════════════════════════════════════
@@ -549,9 +559,9 @@ export default function Portfolio() {
 
       {/* ── NAV ── */}
       <nav className={scrolled?"scrolled":""}>
-        <a className="logo" onClick={()=>go("hero")}>TC</a>
+        <a className="logo" href="#hero" onClick={(e)=>{e.preventDefault(); go("hero");}}>TC</a>
         <ul className="nav-links">
-          {NAV.map(n=><li key={n}><a onClick={()=>go(n.toLowerCase())}>{n}</a></li>)}
+          {NAV.map(n=><li key={n}><a href={`#${n.toLowerCase()}`} onClick={(e)=>{e.preventDefault(); go(n.toLowerCase());}}>{n}</a></li>)}
         </ul>
         <div className="nav-r">
           <div className="hamburger" onClick={()=>setMenuOpen(o=>!o)}>
@@ -561,7 +571,7 @@ export default function Portfolio() {
       </nav>
       <div className={`mob-menu${menuOpen?" open":""}`}>
         <span style={{position:"absolute",top:24,right:28,fontSize:"2rem",cursor:"pointer",color:"var(--muted)"}} onClick={()=>setMenuOpen(false)}>×</span>
-        {NAV.map(n=><a key={n} onClick={()=>go(n.toLowerCase())}>{n}</a>)}
+        {NAV.map(n=><a key={n} href={`#${n.toLowerCase()}`} onClick={(e)=>{e.preventDefault(); go(n.toLowerCase());}}>{n}</a>)}
       </div>
 
       {/* ═══════ HERO ═══════ */}
@@ -587,8 +597,8 @@ export default function Portfolio() {
         </div>
 
         <div className="hero-socials">
-          <a className="soc" href={PROFILE.github} target="_blank"><GhIcon/></a>
-          <a className="soc" href={PROFILE.linkedin} target="_blank"><LiIcon/></a>
+          <a className="soc" href={PROFILE.github} target="_blank" rel="noreferrer"><GhIcon/></a>
+          <a className="soc" href={PROFILE.linkedin} target="_blank" rel="noreferrer"><LiIcon/></a>
           <a className="soc" href={`mailto:${PROFILE.email}`}>✉️</a>
           <a className="soc" href={`tel:${PROFILE.phone}`}>📞</a>
         </div>
@@ -709,10 +719,10 @@ export default function Portfolio() {
 
                 <div className="proj-btns">
                   {p.live
-                    ? <a href={p.live} target="_blank" className="btn-live" style={{background:`linear-gradient(135deg,${p.accent},${p.accent}99)`,color:"#000"}}>🚀 Live Demo</a>
+                    ? <a href={p.live} target="_blank" rel="noreferrer" className="btn-live" style={{background:`linear-gradient(135deg,${p.accent},${p.accent}99)`,color:"#000"}}>🚀 Live Demo</a>
                     : <span className="btn-live" style={{background:"rgba(255,255,255,.04)",color:"var(--muted)",border:"1px solid var(--border)"}}>🔒 Private</span>
                   }
-                  <a href={PROFILE.github} target="_blank" className="btn-code">
+                  <a href={PROFILE.github} target="_blank" rel="noreferrer" className="btn-code">
                     <GhIcon/> Code
                   </a>
                 </div>
@@ -739,7 +749,14 @@ export default function Portfolio() {
                 {icon:"💼",label:"LinkedIn",val:"tanish-chavan-6733ab337",href:PROFILE.linkedin,bg:"rgba(0,119,181,.15)"},
                 {icon:"💻",label:"GitHub",val:"tanishchavan07",href:PROFILE.github,bg:"rgba(255,255,255,.08)"},
               ].map((c,i)=>(
-                <a href={c.href} target={c.href.startsWith("http")?"_blank":"_self"} className="c-link rev" style={{transitionDelay:`${i*.08}s`}} key={c.label}>
+                <a
+                  href={c.href}
+                  target={c.href.startsWith("http")?"_blank":"_self"}
+                  rel={c.href.startsWith("http")?"noreferrer":undefined}
+                  className="c-link rev"
+                  style={{transitionDelay:`${i*.08}s`}}
+                  key={c.label}
+                >
                   <div className="c-link-ic" style={{background:c.bg}}>{c.icon}</div>
                   <div>
                     <div className="c-link-label">{c.label}</div>
@@ -764,8 +781,8 @@ export default function Portfolio() {
                 ✉️ Send Me a Message
               </a>
               <div className="cta-socials">
-                <a className="soc" href={PROFILE.github} target="_blank"><GhIcon/></a>
-                <a className="soc" href={PROFILE.linkedin} target="_blank"><LiIcon/></a>
+                <a className="soc" href={PROFILE.github} target="_blank" rel="noreferrer"><GhIcon/></a>
+                <a className="soc" href={PROFILE.linkedin} target="_blank" rel="noreferrer"><LiIcon/></a>
                 <a className="soc" href={`mailto:${PROFILE.email}`}>✉️</a>
               </div>
             </Tilt>
