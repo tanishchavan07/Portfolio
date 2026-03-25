@@ -654,6 +654,15 @@ export default function Portfolio() {
                   </div>
                 ))}
               </div>
+
+              <a
+                href="/Tanish_Chavan_Resume.pdf"
+                download="Tanish_Chavan_Resume.pdf"
+                className="btn-main"
+                style={{marginTop:20,display:"inline-flex"}}
+              >
+                ⬇️ Download Resume
+              </a>
             </div>
           </div>
         </div>
