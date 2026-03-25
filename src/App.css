@@ -1,0 +1,42 @@
+.App {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--primary-color);
+  color: var(--text-primary);
+}
+
+/* Cursor customization */
+* {
+  cursor: default;
+}
+
+a {
+  cursor: pointer;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Selection styling */
+::selection {
+  background: var(--accent-color);
+  color: var(--primary-color);
+}
+
+::-moz-selection {
+  background: var(--accent-color);
+  color: var(--primary-color);
+}
+
+/* Focus styles for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* Smooth transitions */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
