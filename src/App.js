@@ -15,6 +15,23 @@ const PROFILE = {
 
 const TYPING_WORDS = ["MERN Stack Apps","RESTful APIs","React Interfaces","Full-Stack Systems","Scalable Backends","Clean UI/UX"];
 
+const EXPERIENCE = [
+  {
+    role: "Software Developer Intern",
+    company: "Garunacdx Software Solutions LLP",
+    period: "Mar – Apr 2026",
+    icon: "💼",
+    accent: "#00d4ff",
+    points: [
+      "Developed a client project tracking portal using Next.js (App Router) and Supabase, enabling real-time project visibility and streamlined communication.",
+      "Designed and implemented database schema (projects, tasks, milestones, activity feed) and integrated CRUD operations for end-to-end project management.",
+      "Built role-based workflows with separate admin/team and client dashboards, ensuring secure data access and intuitive user experience.",
+      "Integrated Supabase authentication (magic link and email/password) and optimized frontend performance through efficient data fetching and state management.",
+    ],
+    tech: ["Next.js", "Supabase", "React.js", "PostgreSQL", "JWT"],
+  },
+];
+
 const PROJECTS = [
   {
     title: "Git Score",
@@ -46,10 +63,10 @@ const PROJECTS = [
 ];
 
 const SKILLS = {
-  "Languages":  { icon:"💻", items:["JavaScript","Java","Python"] },
-  "Frameworks": { icon:"⚙️", items:["React.js","Node.js","Express.js","Servlets","JSP"] },
-  "Databases":  { icon:"🗄️", items:["MongoDB","MySQL"] },
-  "Tools":      { icon:"🔧", items:["Git","GitHub","Postman","REST APIs","Vercel","Render"] },
+  "Languages":  { icon:"💻", items:["JavaScript","Python","Java"] },
+  "Frameworks": { icon:"⚙️", items:["React.js","Next.js","Node.js","Express.js","Tailwind CSS","Servlets","JSP"] },
+  "Databases":  { icon:"🗄️", items:["MongoDB","MySQL","Supabase"] },
+  "Tools":      { icon:"🔧", items:["Git","GitHub","Postman","REST APIs","Vercel","Render","VS Code"] },
 };
 
 const EDUCATION = [
@@ -187,6 +204,27 @@ nav.scrolled{background:rgba(0,0,0,.92);backdrop-filter:blur(24px);border-bottom
 .edu-inst{color:var(--muted);font-size:.82rem}
 .edu-meta{display:flex;gap:14px;margin-top:6px;font-size:.75rem;color:var(--c1);font-family:var(--head)}
 
+/* ── EXPERIENCE ── */
+.exp-timeline{display:flex;flex-direction:column;gap:0;position:relative}
+.exp-timeline::before{content:'';position:absolute;left:28px;top:0;bottom:0;width:1px;background:linear-gradient(var(--c1),var(--c2),transparent);opacity:.3}
+.exp-card{position:relative;padding-left:72px;padding-bottom:40px}
+.exp-card:last-child{padding-bottom:0}
+.exp-dot{position:absolute;left:20px;top:28px;width:16px;height:16px;border-radius:50%;background:var(--c1);border:3px solid #000;box-shadow:0 0 20px rgba(0,212,255,.6);z-index:1}
+.exp-dot::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(0,212,255,.3);animation:pulseDot 2s infinite}
+@keyframes pulseDot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.6);opacity:0}}
+.exp-inner{background:var(--glass);border:1px solid var(--border);border-radius:20px;padding:28px 32px;position:relative;overflow:hidden;transition:all .4s}
+.exp-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--c1),var(--c2));opacity:.6}
+.exp-inner:hover{border-color:var(--c1);transform:translateX(8px);box-shadow:0 0 40px rgba(0,212,255,.1)}
+.exp-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px;flex-wrap:wrap}
+.exp-role{font-family:var(--head);font-size:1.1rem;font-weight:900;color:var(--c1);letter-spacing:.5px;margin-bottom:4px}
+.exp-company{font-weight:600;font-size:.95rem;color:var(--text)}
+.exp-period{font-family:var(--head);font-size:.7rem;letter-spacing:2px;color:var(--muted);background:var(--glass2);border:1px solid var(--border);border-radius:100px;padding:6px 14px;white-space:nowrap;align-self:flex-start}
+.exp-points{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+.exp-points li{display:flex;align-items:flex-start;gap:10px;font-size:.85rem;color:var(--muted2);line-height:1.6}
+.exp-points li::before{content:'▸';color:var(--c1);flex-shrink:0;margin-top:1px;font-size:.75rem}
+.exp-tech{display:flex;flex-wrap:wrap;gap:8px}
+.exp-tag{padding:5px 12px;border-radius:100px;font-size:.7rem;font-weight:600;border:1px solid rgba(0,212,255,.25);color:var(--c1);font-family:var(--head);letter-spacing:.5px;background:rgba(0,212,255,.05)}
+
 /* ── SKILLS ── */
 .skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
 .skill-box{background:var(--glass);border:1px solid var(--border);border-radius:20px;padding:28px;transition:all .4s cubic-bezier(.175,.885,.32,1.275);cursor:default;position:relative;overflow:hidden}
@@ -269,6 +307,9 @@ footer span{color:var(--c1)}
   .about-grid,.contact-grid{grid-template-columns:1fr}
   .about-visual{display:none}
   .proj-grid{grid-template-columns:1fr}
+  .exp-card{padding-left:52px}
+  .exp-timeline::before{left:20px}
+  .exp-dot{left:12px}
 }
 `;
 
@@ -533,7 +574,7 @@ export default function Portfolio() {
   useReveal();
 
   const go = id => { document.getElementById(id)?.scrollIntoView({behavior:"smooth"}); setMenuOpen(false); };
-  const NAV = ["About","Skills","Projects","Contact"];
+  const NAV = ["About","Experience","Skills","Projects","Contact"];
 
   return (
     <div style={{background:"#000",minHeight:"100vh"}}>
@@ -586,7 +627,7 @@ export default function Portfolio() {
         </div>
 
         <p className="hero-summary">
-          Computer Science undergraduate specialising in MERN Stack Development.
+          Computer Science undergraduate & Software Developer Intern specialising in MERN Stack Development.
           Building full-stack applications with secure auth, RESTful APIs, and pixel-perfect UIs.
           Passionate about scalable, user-centric solutions.
         </p>
@@ -664,6 +705,43 @@ export default function Portfolio() {
                 ⬇️ Download Resume
               </a>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="divider"/>
+
+      {/* ═══════ EXPERIENCE ═══════ */}
+      <section id="experience" className="sec">
+        <div className="sw">
+          <div className="rev"><div className="sec-tag">Where I've Worked</div></div>
+          <div className="rev"><h2 className="sec-title">Work <span>Experience</span></h2></div>
+
+          <div className="exp-timeline">
+            {EXPERIENCE.map((exp, i) => (
+              <div className="exp-card rev" style={{transitionDelay:`${i*.15}s`}} key={i}>
+                <div className="exp-dot"/>
+                <div className="exp-inner">
+                  <div className="exp-header">
+                    <div>
+                      <div className="exp-role">{exp.role}</div>
+                      <div className="exp-company">{exp.company}</div>
+                    </div>
+                    <div className="exp-period">{exp.period}</div>
+                  </div>
+                  <ul className="exp-points">
+                    {exp.points.map((pt, j) => (
+                      <li key={j}>{pt}</li>
+                    ))}
+                  </ul>
+                  <div className="exp-tech">
+                    {exp.tech.map(t => (
+                      <span className="exp-tag" key={t}>{t}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
