@@ -879,7 +879,7 @@ export default function Portfolio() {
 
       {/* ── FOOTER ── */}
       <footer>
-        <p>Crafted with ❤️ &amp; WebGL by <span>Tanish Santosh Chavan</span> · MERN Stack Developer</p>
+        <p> <span>Tanish Santosh Chavan</span> · MERN Stack Developer</p>
         <p style={{marginTop:8,fontSize:".75rem",color:"var(--muted)"}}>© {new Date().getFullYear()} · Navi Mumbai, Maharashtra, India</p>
       </footer>
 
